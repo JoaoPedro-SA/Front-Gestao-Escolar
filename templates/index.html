@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sistema Escolar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <script>
+      window.APP_CONFIG = {{ config | tojson }};
+    </script>
+
+    <header class="topbar">
+      <div>
+        <h1>Sistema Escolar</h1>
+        <p>Gestao, reservas e atividades</p>
+      </div>
+      <button id="refreshAll" class="primary">Atualizar</button>
+    </header>
+
+    <main>
+      <section class="status-grid" aria-label="Status dos servicos">
+        <article class="status-card">
+          <span class="status-dot" id="gestaoDot"></span>
+          <div>
+            <strong>Gestao</strong>
+            <small id="gestaoStatus">verificando...</small>
+          </div>
+        </article>
+        <article class="status-card">
+          <span class="status-dot" id="reservaDot"></span>
+          <div>
+            <strong>Reservas</strong>
+            <small id="reservaStatus">verificando...</small>
+          </div>
+        </article>
+        <article class="status-card">
+          <span class="status-dot" id="atividadeDot"></span>
+          <div>
+            <strong>Atividades</strong>
+            <small id="atividadeStatus">verificando...</small>
+          </div>
+        </article>
+      </section>
+
+      <nav class="tabs" aria-label="Secoes">
+        <button class="tab active" data-tab="overview">Resumo</button>
+        <button class="tab" data-tab="gestao">Gestao</button>
+        <button class="tab" data-tab="reservas">Reservas</button>
+        <button class="tab" data-tab="atividades">Atividades</button>
+      </nav>
+
+      <section id="overview" class="panel active">
+        <div class="metrics">
+          <article>
+            <span id="professoresCount">0</span>
+            <p>Professores</p>
+          </article>
+          <article>
+            <span id="turmasCount">0</span>
+            <p>Turmas</p>
+          </article>
+          <article>
+            <span id="alunosCount">0</span>
+            <p>Alunos</p>
+          </article>
+          <article>
+            <span id="reservasCount">0</span>
+            <p>Reservas</p>
+          </article>
+          <article>
+            <span id="atividadesCount">0</span>
+            <p>Atividades</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="gestao" class="panel">
+        <div class="split">
+          <div>
+            <h2>Professores</h2>
+            <div id="professoresList" class="table-wrap"></div>
+          </div>
+          <div>
+            <h2>Turmas</h2>
+            <div id="turmasList" class="table-wrap"></div>
+          </div>
+        </div>
+        <h2>Alunos</h2>
+        <div id="alunosList" class="table-wrap"></div>
+      </section>
+
+      <section id="reservas" class="panel">
+        <form id="reservaForm" class="form-row">
+          <label>Turma ID<input name="turma_id" type="number" min="1" required></label>
+          <label>Sala<input name="sala" required></label>
+          <label>Data<input name="data" type="date" required></label>
+          <label>Inicio<input name="hora_inicio" type="time" required></label>
+          <label>Fim<input name="hora_fim" type="time" required></label>
+          <button class="primary" type="submit">Criar reserva</button>
+        </form>
+        <div id="reservaMessage" class="message"></div>
+        <div id="reservasList" class="table-wrap"></div>
+      </section>
+
+      <section id="atividades" class="panel">
+        <form id="atividadeForm" class="form-row">
+          <label>Professor ID<input name="id_professor" type="number" min="1" required></label>
+          <label>Atividade<input name="nome_atividade" required></label>
+          <label>Nota<input name="nota" type="number" step="0.1" min="0" max="10" required></label>
+          <button class="primary" type="submit">Criar atividade</button>
+        </form>
+        <div id="atividadeMessage" class="message"></div>
+        <div id="atividadesList" class="table-wrap"></div>
+      </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>
