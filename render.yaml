@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: front-gestao-escolar
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: FLASK_DEBUG
+        value: "false"
+      - key: GESTAO_API_BASE_URL
+        value: https://api-de-gerenciamento-escolar.onrender.com
+      - key: RESERVA_API_BASE_URL
+        value: https://api-de-reserva-de-salas.onrender.com
+      - key: ATIVIDADE_API_BASE_URL
+        value: https://atividade-microservice-api-escolar.onrender.com
