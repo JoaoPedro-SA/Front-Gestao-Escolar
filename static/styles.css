@@ -103,7 +103,8 @@ main {
 }
 
 .tab,
-.primary {
+.primary,
+.danger {
   min-height: 40px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -126,6 +127,26 @@ main {
 
 .primary:hover {
   background: var(--primary-dark);
+}
+
+.danger {
+  background: #fee2e2;
+  border-color: #fecaca;
+  color: #991b1b;
+}
+
+.danger:hover {
+  background: #fecaca;
+}
+
+.small {
+  min-height: 32px;
+  padding: 0 10px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
 }
 
 .panel {
@@ -160,6 +181,11 @@ main {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 8px;
+}
+
+.empty {
+  padding: 14px;
+  color: var(--muted);
 }
 
 table {
