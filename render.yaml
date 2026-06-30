@@ -6,10 +6,12 @@ services:
       cp index.html public/index.html
       cp static/app.js public/static/app.js
       cp static/styles.css public/static/styles.css
-      printf 'window.APP_CONFIG = {\n  gestaoApiUrl: "%s",\n  reservaApiUrl: "%s",\n  atividadeApiUrl: "%s"\n};\n' "${GESTAO_API_BASE_URL:-https://api-de-gerenciamento-escolar.onrender.com}" "${RESERVA_API_BASE_URL:-https://api-de-reserva-de-salas.onrender.com}" "${ATIVIDADE_API_BASE_URL:-https://atividade-microservice-api-escolar.onrender.com}" > public/config.js
+      printf 'window.APP_CONFIG = {\n  apiTarget: "%s",\n  apiBaseUrls: {\n    render: {\n      gestao: "%s",\n      reserva: "%s",\n      atividade: "%s"\n    },\n    local: {\n      gestao: "http://127.0.0.1:5000",\n      reserva: "http://127.0.0.1:5001",\n      atividade: "http://127.0.0.1:5002"\n    }\n  }\n};\n' "${API_TARGET:-render}" "${GESTAO_API_BASE_URL:-https://api-de-gerenciamento-escolar.onrender.com}" "${RESERVA_API_BASE_URL:-https://api-de-reserva-de-salas.onrender.com}" "${ATIVIDADE_API_BASE_URL:-https://atividade-microservice-api-escolar.onrender.com}" > public/config.js
       printf '{"status":"ok"}\n' > public/health
     staticPublishPath: public
     envVars:
+      - key: API_TARGET
+        value: render
       - key: GESTAO_API_BASE_URL
         value: https://api-de-gerenciamento-escolar.onrender.com
       - key: RESERVA_API_BASE_URL

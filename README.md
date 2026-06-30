@@ -1,6 +1,14 @@
 # Front Gestao Escolar
 
-Frontend estatico para consumir as APIs do Sistema Escolar.
+Frontend estatico para consumir e operar as APIs do Sistema Escolar.
+
+Recursos principais:
+
+- Alternancia visual entre APIs locais e APIs hospedadas no Render.
+- Painel de status para gestao, reservas e atividades.
+- Cadastros de professores, turmas, alunos, reservas e atividades.
+- Busca global nas tabelas.
+- Resumo operacional com contadores, proxima reserva e media de notas.
 
 ## Desenvolvimento Local
 
@@ -14,7 +22,13 @@ Acesse:
 http://localhost:5003
 ```
 
-Para testar localmente com outras URLs, edite temporariamente `config.js` ou gere a pasta `public` com as variaveis desejadas.
+Para alternar entre APIs da nuvem e APIs locais, use o seletor **Ambiente** na tela ou edite `config.js`:
+
+```js
+apiTarget: "local"
+```
+
+Use `apiTarget: "render"` para voltar para as APIs hospedadas no Render. Se precisar trocar apenas uma URL, tambem pode definir `gestaoApiUrl`, `reservaApiUrl` ou `atividadeApiUrl` no `config.js`.
 
 ## Render
 
@@ -35,6 +49,7 @@ O build gera:
 
 Variaveis usadas no build:
 
+- `API_TARGET`
 - `GESTAO_API_BASE_URL`
 - `RESERVA_API_BASE_URL`
 - `ATIVIDADE_API_BASE_URL`

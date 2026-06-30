@@ -1,120 +1,237 @@
 <!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sistema Escolar</title>
-    <link rel="stylesheet" href="/static/styles.css">
-  </head>
-  <body>
-    <script src="/config.js"></script>
 
-    <header class="topbar">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sistema Escolar</title>
+  <link rel="stylesheet" href="static/styles.css">
+</head>
+
+<body>
+  <script src="/config.js"></script>
+
+  <header class="shell-header">
+    <div class="brand-block">
+      <span class="brand-mark" aria-hidden="true">SE</span>
       <div>
+        <p class="eyebrow">Painel integrado</p>
         <h1>Sistema Escolar</h1>
-        <p>Gestao, reservas e atividades</p>
       </div>
-      <button id="refreshAll" class="primary">Atualizar</button>
-    </header>
+    </div>
 
-    <main>
-      <section class="status-grid" aria-label="Status dos servicos">
-        <article class="status-card">
-          <span class="status-dot" id="gestaoDot"></span>
-          <div>
-            <strong>Gestao</strong>
-            <small id="gestaoStatus">verificando...</small>
-          </div>
-        </article>
-        <article class="status-card">
-          <span class="status-dot" id="reservaDot"></span>
-          <div>
-            <strong>Reservas</strong>
-            <small id="reservaStatus">verificando...</small>
-          </div>
-        </article>
-        <article class="status-card">
-          <span class="status-dot" id="atividadeDot"></span>
-          <div>
-            <strong>Atividades</strong>
-            <small id="atividadeStatus">verificando...</small>
-          </div>
-        </article>
-      </section>
+    <div class="header-actions">
+      <label class="field compact">
+        <span>Ambiente</span>
+        <select id="environmentSelect">
+          <option value="render">Nuvem</option>
+          <option value="local">Local</option>
+        </select>
+      </label>
+      <button id="refreshAll" class="button primary" type="button">Atualizar</button>
+    </div>
+  </header>
 
-      <nav class="tabs" aria-label="Secoes">
-        <button class="tab active" data-tab="overview">Resumo</button>
-        <button class="tab" data-tab="gestao">Gestao</button>
-        <button class="tab" data-tab="reservas">Reservas</button>
-        <button class="tab" data-tab="atividades">Atividades</button>
-      </nav>
+  <main class="app-shell">
+    <section class="hero-panel">
+      <div class="hero-copy">
+        <p class="eyebrow">Gestao, reservas e atividades</p>
+        <h2>Operacao escolar conectada em tempo real.</h2>
+        <p class="hero-text">Dados academicos, salas e atividades reunidos em um painel rapido para acompanhamento diario.</p>
+      </div>
 
-      <section id="overview" class="panel active">
-        <div class="metrics">
-          <article>
-            <span id="professoresCount">0</span>
-            <p>Professores</p>
-          </article>
-          <article>
-            <span id="turmasCount">0</span>
-            <p>Turmas</p>
-          </article>
-          <article>
-            <span id="alunosCount">0</span>
-            <p>Alunos</p>
-          </article>
-          <article>
-            <span id="reservasCount">0</span>
-            <p>Reservas</p>
-          </article>
-          <article>
-            <span id="atividadesCount">0</span>
-            <p>Atividades</p>
-          </article>
+      <div class="topology" aria-label="Conexoes entre os servicos">
+        <div class="node main-node">
+          <span>Frontend</span>
+          <strong id="currentTargetLabel">Nuvem</strong>
         </div>
-      </section>
-
-      <section id="gestao" class="panel">
-        <div id="gestaoMessage" class="message"></div>
-        <div class="split">
-          <div>
-            <h2>Professores</h2>
-            <div id="professoresList" class="table-wrap"></div>
-          </div>
-          <div>
-            <h2>Turmas</h2>
-            <div id="turmasList" class="table-wrap"></div>
-          </div>
+        <div class="link-row">
+          <div class="node gestao-node">Gestao</div>
+          <div class="node reserva-node">Reservas</div>
+          <div class="node atividade-node">Atividades</div>
         </div>
-        <h2>Alunos</h2>
-        <div id="alunosList" class="table-wrap"></div>
-      </section>
+      </div>
+    </section>
 
-      <section id="reservas" class="panel">
-        <form id="reservaForm" class="form-row">
-          <label>Turma ID<input name="turma_id" type="number" min="1" required></label>
-          <label>Sala<input name="sala" required></label>
-          <label>Data<input name="data" type="date" required></label>
-          <label>Inicio<input name="hora_inicio" type="time" required></label>
-          <label>Fim<input name="hora_fim" type="time" required></label>
-          <button class="primary" type="submit">Criar reserva</button>
+    <section class="command-bar">
+      <div class="search-box">
+        <span aria-hidden="true">Buscar</span>
+        <input id="globalSearch" type="search" placeholder="Filtrar por nome, turma, sala, atividade ou ID">
+      </div>
+      <div class="endpoint-strip" id="endpointStrip"></div>
+    </section>
+
+    <section class="status-grid" aria-label="Status dos servicos">
+      <article class="status-card">
+        <span class="status-dot" id="gestaoDot"></span>
+        <div>
+          <strong>Gestao escolar</strong>
+          <small id="gestaoStatus">verificando...</small>
+        </div>
+      </article>
+      <article class="status-card">
+        <span class="status-dot" id="reservaDot"></span>
+        <div>
+          <strong>Reservas de sala</strong>
+          <small id="reservaStatus">verificando...</small>
+        </div>
+      </article>
+      <article class="status-card">
+        <span class="status-dot" id="atividadeDot"></span>
+        <div>
+          <strong>Atividades</strong>
+          <small id="atividadeStatus">verificando...</small>
+        </div>
+      </article>
+    </section>
+
+    <section class="metrics" aria-label="Resumo dos registros">
+      <article>
+        <span id="professoresCount">0</span>
+        <p>Professores</p>
+      </article>
+      <article>
+        <span id="turmasCount">0</span>
+        <p>Turmas</p>
+      </article>
+      <article>
+        <span id="alunosCount">0</span>
+        <p>Alunos</p>
+      </article>
+      <article>
+        <span id="reservasCount">0</span>
+        <p>Reservas</p>
+      </article>
+      <article>
+        <span id="atividadesCount">0</span>
+        <p>Atividades</p>
+      </article>
+    </section>
+
+    <nav class="tabs" aria-label="Secoes">
+      <button class="tab active" data-tab="overview" type="button">Resumo</button>
+      <button class="tab" data-tab="gestao" type="button">Gestao</button>
+      <button class="tab" data-tab="reservas" type="button">Reservas</button>
+      <button class="tab" data-tab="atividades" type="button">Atividades</button>
+    </nav>
+
+    <section id="overview" class="panel active">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Visao geral</p>
+          <h2>Operacao do sistema</h2>
+        </div>
+      </div>
+      <div class="insight-grid">
+        <article class="insight-card">
+          <strong id="nextReserva">Sem reservas</strong>
+          <span>Proxima reserva</span>
+        </article>
+        <article class="insight-card">
+          <strong id="avgNota">0.0</strong>
+          <span>Media das atividades</span>
+        </article>
+        <article class="insight-card">
+          <strong id="activeTurmas">0</strong>
+          <span>Turmas ativas</span>
+        </article>
+      </div>
+    </section>
+
+    <section id="gestao" class="panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Cadastros base</p>
+          <h2>Gestao escolar</h2>
+        </div>
+      </div>
+      <div id="gestaoMessage" class="message"></div>
+
+      <div class="form-grid three">
+        <form id="professorForm" class="form-card">
+          <h3>Novo professor</h3>
+          <label class="field">Nome<input name="nome" required></label>
+          <label class="field">Disciplina<input name="disciplina" required></label>
+          <button class="button primary" type="submit">Criar professor</button>
         </form>
-        <div id="reservaMessage" class="message"></div>
-        <div id="reservasList" class="table-wrap"></div>
-      </section>
 
-      <section id="atividades" class="panel">
-        <form id="atividadeForm" class="form-row">
-          <label>Professor ID<input name="id_professor" type="number" min="1" required></label>
-          <label>Atividade<input name="nome_atividade" required></label>
-          <label>Nota<input name="nota" type="number" step="0.1" min="0" max="10" required></label>
-          <button class="primary" type="submit">Criar atividade</button>
+        <form id="turmaForm" class="form-card">
+          <h3>Nova turma</h3>
+          <label class="field">Nome<input name="nome" required></label>
+          <label class="field">Turno<input name="turno" required></label>
+          <label class="field">Professor<select name="professor_id" required></select></label>
+          <button class="button primary" type="submit">Criar turma</button>
         </form>
-        <div id="atividadeMessage" class="message"></div>
-        <div id="atividadesList" class="table-wrap"></div>
-      </section>
-    </main>
 
-    <script src="/static/app.js"></script>
-  </body>
+        <form id="alunoForm" class="form-card">
+          <h3>Novo aluno</h3>
+          <label class="field">Nome<input name="nome" required></label>
+          <label class="field">Idade<input name="idade" type="number" min="1" required></label>
+          <label class="field">Turma<select name="turma_id" required></select></label>
+          <div class="inline-fields">
+            <label class="field">Nota 1<input name="nota_primeiro_semestre" type="number" step="0.1" min="0" max="10" required></label>
+            <label class="field">Nota 2<input name="nota_segundo_semestre" type="number" step="0.1" min="0" max="10" required></label>
+          </div>
+          <button class="button primary" type="submit">Criar aluno</button>
+        </form>
+      </div>
+
+      <div class="data-layout">
+        <article>
+          <h3>Professores</h3>
+          <div id="professoresList" class="table-wrap"></div>
+        </article>
+        <article>
+          <h3>Turmas</h3>
+          <div id="turmasList" class="table-wrap"></div>
+        </article>
+        <article class="wide">
+          <h3>Alunos</h3>
+          <div id="alunosList" class="table-wrap"></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="reservas" class="panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Salas e horarios</p>
+          <h2>Reservas</h2>
+        </div>
+      </div>
+      <form id="reservaForm" class="form-card horizontal">
+        <label class="field">Turma<select name="turma_id" required></select></label>
+        <label class="field">Sala<input name="sala" required></label>
+        <label class="field">Data<input name="data" type="date" required></label>
+        <label class="field">Inicio<input name="hora_inicio" type="time" required></label>
+        <label class="field">Fim<input name="hora_fim" type="time" required></label>
+        <button class="button primary" type="submit">Criar reserva</button>
+      </form>
+      <div id="reservaMessage" class="message"></div>
+      <div id="reservasList" class="table-wrap"></div>
+    </section>
+
+    <section id="atividades" class="panel">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Notas e entregas</p>
+          <h2>Atividades</h2>
+        </div>
+      </div>
+      <form id="atividadeForm" class="form-card horizontal">
+        <label class="field">Professor<select name="id_professor" required></select></label>
+        <label class="field">Atividade<input name="nome_atividade" required></label>
+        <label class="field">Nota<input name="nota" type="number" step="0.1" min="0" max="10" required></label>
+        <button class="button primary" type="submit">Criar atividade</button>
+      </form>
+      <div id="atividadeMessage" class="message"></div>
+      <div id="atividadesList" class="table-wrap"></div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+
 </html>
